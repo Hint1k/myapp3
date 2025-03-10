@@ -1,1 +1,2 @@
 rootProject.name = 'fds'
+include 'transaction-service'
