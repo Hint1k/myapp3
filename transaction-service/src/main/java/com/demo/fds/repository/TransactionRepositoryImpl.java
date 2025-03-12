@@ -6,7 +6,6 @@ import com.demo.fds.exception.custom.DatabaseException;
 import com.demo.fds.utils.TransactionCurrency;
 import com.demo.fds.utils.TransactionRisk;
 import com.demo.fds.utils.TransactionStatus;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-@Slf4j
 public class TransactionRepositoryImpl implements TransactionRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
@@ -42,7 +40,6 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         try {
             namedParameterJdbcTemplate.update(sql, createTransactionParams(transaction));
         } catch (Exception e) {
-            log.error("Error saving transaction: {}", e.getMessage());
             throw new DatabaseException("Error saving transaction", e);
         }
 
@@ -56,7 +53,6 @@ public class TransactionRepositoryImpl implements TransactionRepository {
         try {
             namedParameterJdbcTemplate.update(sql, params);
         } catch (Exception e) {
-            log.error("Error deleting transaction: {}", e.getMessage());
             throw new DatabaseException("Error deleting transaction", e);
         }
     }
@@ -68,7 +64,6 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             List<Transaction> transactions = namedParameterJdbcTemplate.query(sql, params, TRANSACTION_ROW_MAPPER);
             return transactions.isEmpty() ? Optional.empty() : Optional.of(transactions.get(0));
         } catch (Exception e) {
-            log.error("Error transaction with id: {} not found: {}", id, e.getMessage());
             throw new DatabaseException("Error fetching transaction by id", e);
         }
     }
@@ -89,10 +84,10 @@ public class TransactionRepositoryImpl implements TransactionRepository {
             params.addValue("limit", pageable.getPageSize());
             params.addValue("offset", pageable.getOffset());
 
-            List<Transaction> transactions = namedParameterJdbcTemplate.query(finalQuery, params, TRANSACTION_ROW_MAPPER);
+            List<Transaction> transactions =
+                    namedParameterJdbcTemplate.query(finalQuery, params, TRANSACTION_ROW_MAPPER);
             return new PageImpl<>(transactions, pageable, transactions.size());
         } catch (Exception e) {
-            log.error("Error fetching filtered transactions: {}", e.getMessage());
             throw new DatabaseException("Error fetching filtered transactions", e);
         }
     }

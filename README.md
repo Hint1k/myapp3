@@ -5,7 +5,7 @@ Fraud Detection System is a **planned microservices-based** application designed
 
 The system will incorporate **risk scoring, and rule-based detection** to flag suspicious activities. Fraud analysts will be able to **search fraudulent transactions** using **Elasticsearch** and **generate reports stored in S3** for audits.
 
-🚧 **This project is currently in the planning phase. Development will be done in stages.** 🚧
+🚧 **This project is currently in early development phase. ** 🚧
 
 ---
 
@@ -68,30 +68,3 @@ The system will incorporate **risk scoring, and rule-based detection** to flag s
 | **Docker**                | Containerized deployment |
 
 ---
-
-## 📅 **Development Roadmap**
-
-### 🏁 **Phase 1: Project Setup & Core Services**
-- [ ] Initialize GitHub repository & project structure
-- [ ] Set up **Spring Boot microservices**
-- [ ] Implement **JWT authentication & role-based access**
-
-### 🚀 **Phase 2: Core Fraud Detection Engine**
-- [ ] Implement **transaction ingestion service**
-- [ ] Develop **fraud detection service** with rule-based logic
-- [ ] Integrate **Kafka for event-driven communication**
-
-### 📊 **Phase 3: Analytics & Storage**
-- [ ] Implement **Elasticsearch integration**
-- [ ] Develop **fraud search API** for analysts
-- [ ] Implement **Redis caching & rate limiting**
-
-### 📂 **Phase 4: Reporting & S3 Integration**
-- [ ] Enable **fraud report generation (CSV, PDF)**
-- [ ] Implement **AWS S3 (or MinIO) storage for reports**
-- [ ] Generate **presigned URLs for secure report access**
-
-### 🔒 **Phase 5: Security, Optimization & Deployment**
-- [ ] Add **audit logging & monitoring**
-- [ ] Optimize database queries for **real-time performance**
-- [ ] Deploy services using **Docker & Kubernetes(optional)**

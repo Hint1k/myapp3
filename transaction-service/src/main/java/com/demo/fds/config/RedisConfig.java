@@ -1,5 +1,6 @@
 package com.demo.fds.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -11,13 +12,14 @@ import java.time.Duration;
 @Configuration
 public class RedisConfig {
 
-    private static final int CACHE_EXPIRATION_TIME = 10; // TODO move to config file later
+    @Value("${spring.cache.redis.time-to-live}")
+    private long cacheExpirationTime;
 
     @Bean
     public RedisCacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
 
         RedisCacheConfiguration cacheConfig = RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(CACHE_EXPIRATION_TIME)).disableCachingNullValues();
+                .entryTtl(Duration.ofMinutes(cacheExpirationTime)).disableCachingNullValues();
 
         return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(cacheConfig).build();
     }

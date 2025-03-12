@@ -7,7 +7,6 @@ import com.demo.fds.entity.Transaction;
 import com.demo.fds.exception.custom.InvalidPageableException;
 import com.demo.fds.exception.custom.OptimisticLockingException;
 import com.demo.fds.service.TransactionService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
@@ -20,7 +19,6 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/transactions")
-@Slf4j
 public class TransactionController {
 
     private final TransactionService transactionService;
@@ -36,7 +34,6 @@ public class TransactionController {
     public ResponseEntity<TransactionDto> createTransaction(@RequestBody TransactionDto transactionDto) {
         Transaction transaction = converter.convertToTransaction(transactionDto);
         Transaction savedTransaction = transactionService.createTransaction(transaction);
-        log.info("Saved transaction: {}", transaction);
         return ResponseEntity.status(HttpStatus.CREATED).body(converter.convertToTransactionDto(savedTransaction));
     }
 
@@ -46,11 +43,9 @@ public class TransactionController {
         Transaction transaction = converter.convertToTransaction(transactionDto);
         try {
             Optional<Transaction> updatedTransaction = transactionService.updateTransaction(id, transaction);
-            log.info("Updated transaction: {}", transaction);
             return updatedTransaction.map(converter::convertToTransactionDto).map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
         } catch (OptimisticLockingFailureException ex) {
-            log.error("OptimisticLockingFailureException", ex);
             throw new OptimisticLockingException("Conflict occurred: " + ex.getMessage());
         }
     }
@@ -58,7 +53,6 @@ public class TransactionController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteTransaction(@PathVariable Long id) {
         boolean deleted = transactionService.deleteTransaction(id);
-        log.info("Deleted transaction with id: {}", id);
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
@@ -67,12 +61,10 @@ public class TransactionController {
                                                                         Pageable pageable) {
         if (pageable.getPageNumber() < 0 || pageable.getPageSize() <= 0) {
             String message = "Page number must be non-negative and page size must be greater than zero";
-            log.error(message);
             throw new InvalidPageableException(message);
         }
         Page<Transaction> transactions = transactionService.getFilteredTransactions(filterDto, pageable);
         Page<TransactionDto> transactionDtoList = transactions.map(converter::convertToTransactionDto);
-        log.info("Found {} filtered transactions", transactionDtoList.getTotalElements());
         return ResponseEntity.ok(transactionDtoList);
     }
 }

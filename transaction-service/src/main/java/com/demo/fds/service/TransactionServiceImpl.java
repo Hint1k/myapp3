@@ -4,7 +4,6 @@ import com.demo.fds.dto.TransactionFilterDto;
 import com.demo.fds.entity.Transaction;
 import com.demo.fds.exception.custom.ResourceNotFoundException;
 import com.demo.fds.repository.TransactionRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -17,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 @Service
-@Slf4j
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
@@ -47,7 +45,6 @@ public class TransactionServiceImpl implements TransactionService {
             updateTransactionFields(currentTransaction, transaction);
             return Optional.of(transactionRepository.save(currentTransaction));
         }
-        log.error("Could not find transaction with id {}", transactionId);
         throw new ResourceNotFoundException("Transaction with ID " + transactionId + " not found");
     }
 
