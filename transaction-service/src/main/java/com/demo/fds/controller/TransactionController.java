@@ -7,28 +7,30 @@ import com.demo.fds.entity.Transaction;
 import com.demo.fds.exception.custom.InvalidPageableException;
 import com.demo.fds.exception.custom.OptimisticLockingException;
 import com.demo.fds.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/transactions")
+@RequiredArgsConstructor
 public class TransactionController {
 
     private final TransactionService transactionService;
     private final Converter converter;
-
-    @Autowired
-    public TransactionController(TransactionService transactionService, Converter converter) {
-        this.transactionService = transactionService;
-        this.converter = converter;
-    }
 
     @PostMapping
     public ResponseEntity<TransactionDto> createTransaction(@RequestBody TransactionDto transactionDto) {
@@ -38,8 +40,8 @@ public class TransactionController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TransactionDto> updateTransaction(@PathVariable Long id,
-                                                            @RequestBody TransactionDto transactionDto) {
+    public ResponseEntity<TransactionDto> updateTransaction(
+            @PathVariable Long id, @RequestBody TransactionDto transactionDto) {
         Transaction transaction = converter.convertToTransaction(transactionDto);
         try {
             Optional<Transaction> updatedTransaction = transactionService.updateTransaction(id, transaction);
@@ -57,8 +59,8 @@ public class TransactionController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<Page<TransactionDto>> getFilteredTransactions(TransactionFilterDto filterDto,
-                                                                        Pageable pageable) {
+    public ResponseEntity<Page<TransactionDto>> getFilteredTransactions(
+            TransactionFilterDto filterDto, Pageable pageable) {
         if (pageable.getPageNumber() < 0 || pageable.getPageSize() <= 0) {
             String message = "Page number must be non-negative and page size must be greater than zero";
             throw new InvalidPageableException(message);

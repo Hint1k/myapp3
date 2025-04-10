@@ -20,7 +20,7 @@ services:
   transaction-service:
     build:
       context: ./transaction-service
-      dockerfile: Dockerfile_local
+      dockerfile: Dockerfile
     volumes:
       - gradle-cache:/home/gradle/.gradle
     container_name: hint1k_transaction-service

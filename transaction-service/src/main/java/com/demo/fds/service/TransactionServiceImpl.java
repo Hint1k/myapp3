@@ -4,37 +4,33 @@ import com.demo.fds.dto.TransactionFilterDto;
 import com.demo.fds.entity.Transaction;
 import com.demo.fds.exception.custom.ResourceNotFoundException;
 import com.demo.fds.repository.TransactionRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class TransactionServiceImpl implements TransactionService {
 
     private final TransactionRepository transactionRepository;
 
-    @Autowired
-    public TransactionServiceImpl(TransactionRepository transactionRepository) {
-        this.transactionRepository = transactionRepository;
-    }
-
     @Override
-    @Transactional
-    @CacheEvict(value = "transactions", allEntries = true) // to avoid messing up with the filtering logic
+    @Transactional // TODO update caching, probably need to do it manually
+//    @CacheEvict(value = "transactions", allEntries = true) // to avoid messing up with the filtering logic
     public Transaction createTransaction(Transaction transaction) {
         return transactionRepository.save(transaction);
     }
 
     @Override
     @Transactional
-    @CacheEvict(value = "transactions", key = "#transactionId")
+//    @CacheEvict(value = "transactions", key = "#transactionId")
     public Optional<Transaction> updateTransaction(Long transactionId, Transaction transaction) {
         Optional<Transaction> existingTransaction = transactionRepository.findById(transactionId);
         if (existingTransaction.isPresent()) {
@@ -50,7 +46,7 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional
-    @CacheEvict(value = "transactions", allEntries = true)
+//    @CacheEvict(value = "transactions", allEntries = true)
     public boolean deleteTransaction(Long id) {
         Optional<Transaction> existingTransaction = transactionRepository.findById(id);
         if (existingTransaction.isPresent()) {
@@ -62,9 +58,9 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     @Transactional(readOnly = true)
-    @Cacheable(value = "transactions",
-            key = "#transaction.hashCode() + '-' + #pageable.pageNumber + '-' + #pageable.pageSize"
-    )
+//    @Cacheable(value = "transactions",
+//            key = "#transaction.hashCode() + '-' + #pageable.pageNumber + '-' + #pageable.pageSize"
+//    )
     public Page<Transaction> getFilteredTransactions(TransactionFilterDto transaction, Pageable pageable) {
         return transactionRepository.findFilteredTransactions(transaction, pageable);
     }

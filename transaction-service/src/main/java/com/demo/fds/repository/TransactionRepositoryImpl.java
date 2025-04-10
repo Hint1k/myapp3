@@ -6,7 +6,7 @@ import com.demo.fds.exception.custom.DatabaseException;
 import com.demo.fds.utils.TransactionCurrency;
 import com.demo.fds.utils.TransactionRisk;
 import com.demo.fds.utils.TransactionStatus;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
@@ -20,14 +20,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class TransactionRepositoryImpl implements TransactionRepository {
 
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
-
-    @Autowired
-    public TransactionRepositoryImpl(NamedParameterJdbcTemplate namedParameterJdbcTemplate) {
-        this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-    }
 
     public Transaction save(Transaction transaction) {
         String sql = "INSERT INTO transactions (customer_id, merchant_id, amount, timestamp, currency, location, risk,"

@@ -65,6 +65,6 @@ The system will incorporate **risk scoring, and rule-based detection** to flag s
 | **Elasticsearch**         | Fraud transaction search & analytics |
 | **Redis**                 | Caching & rate limiting |
 | **AWS S3 (or MinIO)**     | Report storage |
+| **Springdoc OpenAPI (Swagger)** | API documentation & testing |
 | **Docker**                | Containerized deployment |
-
 ---
