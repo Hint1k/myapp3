@@ -28,10 +28,10 @@ public class Transaction {
     private Long transactionId;
 
     @Column("customer_id")
-    private Long customerId;
+    private Long sourceAccountNumber;
 
     @Column("merchant_id")
-    private Long merchantId;
+    private Long destinationAccountNumber;
 
     @Column("amount")
     private BigDecimal amount;
@@ -56,11 +56,11 @@ public class Transaction {
     private Long version;
 
     // no transaction id
-    public Transaction(Long customerId, Long merchantId, BigDecimal amount, LocalDateTime timestamp,
-                       TransactionCurrency currency, String location, TransactionRisk risk, TransactionStatus status,
-                       Long version) {
-        this.customerId = customerId;
-        this.merchantId = merchantId;
+    public Transaction(Long sourceAccountNumber, Long destinationAccountNumber, BigDecimal amount,
+                       LocalDateTime timestamp, TransactionCurrency currency, String location, TransactionRisk risk,
+                       TransactionStatus status, Long version) {
+        this.sourceAccountNumber = sourceAccountNumber;
+        this.destinationAccountNumber = destinationAccountNumber;
         this.amount = amount;
         this.timestamp = timestamp;
         this.currency = currency;
@@ -74,26 +74,29 @@ public class Transaction {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Transaction that = (Transaction) o;
-        return Objects.equals(transactionId, that.transactionId) && Objects.equals(customerId, that.customerId)
-                && Objects.equals(merchantId, that.merchantId) && Objects.equals(amount, that.amount)
-                && Objects.equals(timestamp, that.timestamp) && currency == that.currency
-                && Objects.equals(location, that.location) && risk == that.risk && status == that.status
+        return Objects.equals(transactionId, that.transactionId)
+                && Objects.equals(sourceAccountNumber, that.sourceAccountNumber)
+                && Objects.equals(destinationAccountNumber, that.destinationAccountNumber)
+                && Objects.equals(amount, that.amount)
+                && Objects.equals(timestamp, that.timestamp)
+                && currency == that.currency
+                && Objects.equals(location, that.location)
+                && risk == that.risk && status == that.status
                 && Objects.equals(version, that.version);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                transactionId, customerId, merchantId, amount, timestamp, currency, location, risk, status, version
-        );
+        return Objects.hash(transactionId, sourceAccountNumber, destinationAccountNumber, amount, timestamp, currency,
+                location, risk, status, version);
     }
 
     @Override
     public String toString() {
         return "Transaction{" +
                 "transactionId=" + transactionId +
-                ", customerId=" + customerId +
-                ", merchantId=" + merchantId +
+                ", customerId=" + sourceAccountNumber +
+                ", merchantId=" + destinationAccountNumber +
                 ", amount=" + amount +
                 ", timestamp=" + timestamp +
                 ", currency=" + currency +

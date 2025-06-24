@@ -35,3 +35,4 @@ out/
 ### VS Code ###
 .vscode/
 Project_Structure.txt
+/Kafka_events_structure.png

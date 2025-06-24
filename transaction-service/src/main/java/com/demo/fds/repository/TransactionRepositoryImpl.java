@@ -26,12 +26,15 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     private final NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 
     public Transaction save(Transaction transaction) {
-        String sql = "INSERT INTO transactions (customer_id, merchant_id, amount, timestamp, currency, location, risk,"
-                + " status, version) VALUES (:customerId, :merchantId, :amount, :timestamp, :currency, :location,"
-                + " :risk, :status, :version) ON CONFLICT (transaction_id) DO UPDATE SET customer_id ="
-                + " EXCLUDED.customer_id, merchant_id = EXCLUDED.merchant_id, amount = EXCLUDED.amount, timestamp ="
-                + " EXCLUDED.timestamp, currency = EXCLUDED.currency, location = EXCLUDED.location, risk ="
-                + " EXCLUDED.risk, status = EXCLUDED.status, version = EXCLUDED.version";
+        String sql = "INSERT INTO transactions (account_source_number, destination_account_number, amount, timestamp, "
+                + "currency, location, risk, status, version) "
+                + "VALUES (:sourceAccountNumber, :destinationAccountNumber, :amount, :timestamp, :currency, "
+                + ":location, :risk, :status, :version) "
+                + "ON CONFLICT (transaction_id) "
+                + "DO UPDATE SET source_account_number = EXCLUDED.source_account_number, destination_account_number = "
+                + "EXCLUDED.destination_account_number, amount = EXCLUDED.amount, timestamp = EXCLUDED.timestamp, "
+                + "currency = EXCLUDED.currency, location = EXCLUDED.location, risk = EXCLUDED.risk, status = "
+                + "EXCLUDED.status, version = EXCLUDED.version";
 
         try {
             namedParameterJdbcTemplate.update(sql, createTransactionParams(transaction));
@@ -111,8 +114,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     private static final RowMapper<Transaction> TRANSACTION_ROW_MAPPER = (rs, rowNum) -> {
         Transaction transaction = new Transaction();
         transaction.setTransactionId(rs.getLong("transaction_id"));
-        transaction.setCustomerId(rs.getLong("customer_id"));
-        transaction.setMerchantId(rs.getLong("merchant_id"));
+        transaction.setSourceAccountNumber(rs.getLong("source_account_number"));
+        transaction.setDestinationAccountNumber(rs.getLong("destination_account_number"));
         transaction.setAmount(rs.getBigDecimal("amount"));
         transaction.setTimestamp(rs.getTimestamp("timestamp").toLocalDateTime());
         transaction.setCurrency(TransactionCurrency.valueOf(rs.getString("currency")));
@@ -125,8 +128,8 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     private MapSqlParameterSource createTransactionParams(Transaction transaction) {
         return new MapSqlParameterSource()
-                .addValue("customerId", transaction.getCustomerId())
-                .addValue("merchantId", transaction.getMerchantId())
+                .addValue("source_account_number", transaction.getSourceAccountNumber())
+                .addValue("destination_account_number", transaction.getDestinationAccountNumber())
                 .addValue("amount", transaction.getAmount())
                 .addValue("timestamp", transaction.getTimestamp())
                 .addValue("currency", transaction.getCurrency())
@@ -138,8 +141,9 @@ public class TransactionRepositoryImpl implements TransactionRepository {
 
     private void applyFilters(TransactionFilterDto filterDto, StringJoiner conditions, MapSqlParameterSource params) {
         addNamedCondition(filterDto.getTransactionId(), "transaction_id", conditions, params);
-        addNamedCondition(filterDto.getCustomerId(), "customer_id", conditions, params);
-        addNamedCondition(filterDto.getMerchantId(), "merchant_id", conditions, params);
+        addNamedCondition(filterDto.getSourceAccountNumber(), "source_account_number", conditions, params);
+        addNamedCondition(filterDto.getDestinationAccountNumber(),
+                "destination_account_number", conditions, params);
         addNamedCondition(filterDto.getStatus(), "status", conditions, params);
         addNamedCondition(filterDto.getRisk(), "risk", conditions, params);
         addNamedCondition(filterDto.getCurrency(), "currency", conditions, params);

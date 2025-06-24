@@ -5,8 +5,6 @@ import com.demo.fds.entity.Transaction;
 import com.demo.fds.exception.custom.ResourceNotFoundException;
 import com.demo.fds.repository.TransactionRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -66,8 +64,8 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private void updateTransactionFields(Transaction currentTransaction, Transaction transaction) {
-        currentTransaction.setCustomerId(transaction.getCustomerId());
-        currentTransaction.setMerchantId(transaction.getMerchantId());
+        currentTransaction.setSourceAccountNumber(transaction.getSourceAccountNumber());
+        currentTransaction.setDestinationAccountNumber(transaction.getDestinationAccountNumber());
         currentTransaction.setAmount(transaction.getAmount());
         currentTransaction.setTimestamp(transaction.getTimestamp());
         currentTransaction.setCurrency(transaction.getCurrency());

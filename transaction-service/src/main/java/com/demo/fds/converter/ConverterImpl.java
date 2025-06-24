@@ -30,11 +30,11 @@ public class ConverterImpl implements Converter {
         if (filterDto.getTransactionId() != null) {
             transaction.setTransactionId(filterDto.getTransactionId());
         }
-        if (filterDto.getCustomerId() != null) {
-            transaction.setCustomerId(filterDto.getCustomerId());
+        if (filterDto.getSourceAccountNumber() != null) {
+            transaction.setSourceAccountNumber(filterDto.getSourceAccountNumber());
         }
-        if (filterDto.getMerchantId() != null) {
-            transaction.setMerchantId(filterDto.getMerchantId());
+        if (filterDto.getDestinationAccountNumber() != null) {
+            transaction.setDestinationAccountNumber(filterDto.getDestinationAccountNumber());
         }
         if (filterDto.getStatus() != null) {
             transaction.setStatus(filterDto.getStatus());

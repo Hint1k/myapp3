@@ -1,5 +1,6 @@
 package com.demo.fds.event;
 
+import com.demo.fds.dto.TransactionDto;
 import lombok.Getter;
 
 import java.time.LocalDateTime;
@@ -11,25 +12,26 @@ public abstract class TransactionEvent {
 
     private final UUID eventId;
     private final LocalDateTime eventTimestamp;
-    private final Long transactionId;
+    private final TransactionDto transaction;
 
-    protected TransactionEvent(Long transactionId) {
+    protected TransactionEvent(TransactionDto transaction) {
+        this.transaction = transaction;
         this.eventId = UUID.randomUUID();
         this.eventTimestamp = LocalDateTime.now();
-        this.transactionId = transactionId;
     }
 
     @Override
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         TransactionEvent that = (TransactionEvent) o;
-        return Objects.equals(eventId, that.eventId) && Objects.equals(eventTimestamp, that.eventTimestamp)
-                && Objects.equals(transactionId, that.transactionId);
+        return Objects.equals(eventId, that.eventId)
+                && Objects.equals(eventTimestamp, that.eventTimestamp)
+                && Objects.equals(transaction, that.transaction);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(eventId, eventTimestamp, transactionId);
+        return Objects.hash(eventId, eventTimestamp, transaction);
     }
 
     @Override
@@ -37,7 +39,7 @@ public abstract class TransactionEvent {
         return "TransactionEvent{" +
                 "eventId=" + eventId +
                 ", eventTimestamp=" + eventTimestamp +
-                ", transactionId=" + transactionId +
+                ", transaction=" + transaction +
                 '}';
     }
 }

@@ -20,8 +20,8 @@ import java.util.Objects;
 public class TransactionFilterDto {
 
     private Long transactionId;
-    private Long customerId;
-    private Long merchantId;
+    private Long sourceAccountNumber;
+    private Long destinationAccountNumber;
     private TransactionStatus status;
     private TransactionRisk risk;
     private TransactionCurrency currency;
@@ -38,26 +38,30 @@ public class TransactionFilterDto {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         TransactionFilterDto that = (TransactionFilterDto) o;
-        return Objects.equals(transactionId, that.transactionId) && Objects.equals(customerId, that.customerId)
-                && Objects.equals(merchantId, that.merchantId) && Objects.equals(status, that.status)
-                && Objects.equals(risk, that.risk) && Objects.equals(currency, that.currency)
-                && Objects.equals(minAmount, that.minAmount) && Objects.equals(maxAmount, that.maxAmount)
-                && Objects.equals(startDate, that.startDate) && Objects.equals(endDate, that.endDate);
+        return Objects.equals(transactionId, that.transactionId)
+                && Objects.equals(sourceAccountNumber, that.sourceAccountNumber)
+                && Objects.equals(destinationAccountNumber, that.destinationAccountNumber)
+                && Objects.equals(status, that.status)
+                && Objects.equals(risk, that.risk)
+                && Objects.equals(currency, that.currency)
+                && Objects.equals(minAmount, that.minAmount)
+                && Objects.equals(maxAmount, that.maxAmount)
+                && Objects.equals(startDate, that.startDate)
+                && Objects.equals(endDate, that.endDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(
-                transactionId, customerId, merchantId, status, risk, currency, minAmount, maxAmount, startDate, endDate
-        );
+        return Objects.hash(transactionId, sourceAccountNumber, destinationAccountNumber, status, risk, currency,
+                minAmount, maxAmount, startDate, endDate);
     }
 
     @Override
     public String toString() {
         return "TransactionFilterDto{" +
                 "transactionId=" + transactionId +
-                ", customerId=" + customerId +
-                ", merchantId=" + merchantId +
+                ", customerId=" + sourceAccountNumber +
+                ", merchantId=" + destinationAccountNumber +
                 ", status='" + status + '\'' +
                 ", risk='" + risk + '\'' +
                 ", currency='" + currency + '\'' +
